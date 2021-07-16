@@ -1,73 +1,84 @@
+/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {Platform, Text, View, StyleSheet} from "react-native";
+import {Platform, Text, View, StyleSheet, Alert} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const today = new Date()
-const inputFieldDate = `${today.getDay()}/${today.getMonth()}/${today.getFullYear()}`
 
 const CalcAge = () => {
-    const [show, setShow] = useState(false);
-    const [date, setDate] = useState(new Date(1598051730000));
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [age, setAge] = useState(0);
+  const [alert, setAlert] = useState(false);
+console.log(age)
+  let fieldDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    setShow(false);
+  };
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = date;
-        setShow(Platform.OS === 'android');
-        setDate(currentDate);
-    };
+  const calendarPressHandler = () => {
+    setShow(true);
+  };
 
-    const calendarPressHandler = () => {
-        setShow(true)
-    }
+  const calculateAge = () => {
+      const currentYear = new Date().getFullYear()
+    console.log(currentYear)
+      setAge(currentYear - date.getFullYear())
 
+      setAlert(true);
+  }
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Enter Your Date Of Birth</Text>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Enter Your Date Of Birth</Text>
 
-            <TextInput
-                style={styles.input}
-                label="Date Of Birth"
-                value={inputFieldDate}
-                onChangeText={text => setDate(text)}
-                right={<TextInput.Icon name='calendar'
-                                       onPress={calendarPressHandler}
-                />}
-            />
-            <Button
+      <TextInput
+        style={styles.input}
+        label="Date Of Birth"
+        value={fieldDate}
+        onChangeText={text => setDate(text)}
+        right={
+          <TextInput.Icon name="calendar" onPress={calendarPressHandler} />
+        }
+      />
+      <Button onPress={calculateAge}>Calculate</Button>
 
-            >Calculate</Button>
-
-            {show && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode='date'
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                />
-            )}
-        </View>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+        />
+      )}
+      {alert && (
+           Alert.alert(
+      "Your Age",
+      `You are ${age} years old.`,
+      [
+        { text: "OK", onPress: () => setAlert(false) }
+      ]
     )
-}
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        margin: 25,
-            justifyContent
-    :
-        'center',
-    }
-,
-    input: {
-        margin: 10,
-    }
-,
-    text: {
-        alignSelf: 'center',
-    }
-}
-)
+  container: {
+    margin: 25,
+    justifyContent: 'center',
+  },
+  input: {
+    margin: 10,
+  },
+  text: {
+    alignSelf: 'center',
+  },
+});
 export default CalcAge;
