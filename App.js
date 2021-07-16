@@ -7,7 +7,7 @@ import CalcAge from "./components/CalcAge"
 const App = () => {
 
     return (
-        <View>
+        <View style={styles.container}>
             <Header/>
             <CalcAge />
         </View>
@@ -16,9 +16,9 @@ const App = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100,
         color: 'red',
         flex: 1,
+        backgroundColor: '#393E46',
     }
 })
 

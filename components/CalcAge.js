@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {Platform, Text, View, StyleSheet, Alert} from 'react-native';
+import {Platform, Text, View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -10,7 +10,7 @@ const CalcAge = () => {
   const [date, setDate] = useState(new Date());
   const [age, setAge] = useState(0);
   const [alert, setAlert] = useState(false);
-console.log(age)
+
   let fieldDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
 
   const onChange = (event, selectedDate) => {
@@ -26,7 +26,6 @@ console.log(age)
 
   const calculateAge = () => {
       const currentYear = new Date().getFullYear()
-    console.log(currentYear)
       setAge(currentYear - date.getFullYear())
 
       setAlert(true);
@@ -37,15 +36,20 @@ console.log(age)
       <Text style={styles.text}>Enter Your Date Of Birth</Text>
 
       <TextInput
+          showSoftInputOnFocus={false}
         style={styles.input}
         label="Date Of Birth"
         value={fieldDate}
         onChangeText={text => setDate(text)}
+        onFocus={calendarPressHandler}
         right={
           <TextInput.Icon name="calendar" onPress={calendarPressHandler} />
         }
       />
-      <Button onPress={calculateAge}>Calculate</Button>
+
+      <Button
+          color='#00ADB5'
+          onPress={calculateAge}>Calculate</Button>
 
       {show && (
         <DateTimePicker
@@ -79,6 +83,7 @@ const styles = StyleSheet.create({
   },
   text: {
     alignSelf: 'center',
+    color: '#EEEEEE'
   },
 });
 export default CalcAge;
